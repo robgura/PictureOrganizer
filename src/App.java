@@ -24,6 +24,7 @@ public class App extends JFrame
 
 	private JTable table;
 	private JProgressBar progressBar;
+	private CameraModelInfo modelInfo;
 
 	/**
 	 * Launch the application.
@@ -76,8 +77,17 @@ public class App extends JFrame
 		initChooseDirectory(getContentPane());
 		
 		initTable();
+		
+		initModelInfo();
 	}
 
+	private void initModelInfo()
+	{
+		JPanel panel = new JPanel();
+		getContentPane().add(panel, BorderLayout.WEST);
+		modelInfo = new CameraModelInfo(panel);
+	}
+	
 	private void initTable()
 	{
 		AbstractTableModel tableModel = new MediaTableModel(progressBar);
