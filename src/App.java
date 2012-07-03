@@ -16,10 +16,11 @@ import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
-public class App
+@SuppressWarnings("serial")
+public class App extends JFrame
 {
 
-	private JFrame frame;
+	//private JFrame frame;
 	private JTable table;
 
 	/**
@@ -27,22 +28,29 @@ public class App
 	 */
 	public static void main(String[] args)
 	{
-		EventQueue.invokeLater(new Runnable()
+		JFrame frame;
+		try
 		{
-			public void run()
-			{
-				try
-				{
-					App window = new App();
-					window.frame.pack();
-					window.frame.setVisible(true);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		});
+			frame = new App();
+			frame.pack();
+			frame.setVisible(true);
+		}
+		catch (ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		catch (InstantiationException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e)
+		{
+			e.printStackTrace();
+		}
+		catch (UnsupportedLookAndFeelException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -57,19 +65,13 @@ public class App
 	{
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-		initialize();
-	}
-
-	private void initialize()
-	{
 		initFrame();
+		
 		initMenuBar();
 
-		// chose directory section
-		initChooseDirectory(frame);
+		initChooseDirectory(this);
 
 		initTable();
-
 	}
 
 	private void initTable()
@@ -81,15 +83,14 @@ public class App
 		JPanel centerPanel = new JPanel();
 		JScrollPane scrollPane = new JScrollPane(table);
 		centerPanel.add(scrollPane);
-		frame.getContentPane().add(centerPanel, BorderLayout.CENTER);
+		getContentPane().add(centerPanel, BorderLayout.CENTER);
 	}
 
 	private void initFrame()
 	{
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		setBounds(100, 100, 450, 300);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(new BorderLayout(0, 0));
 	}
 
 	private static void initChooseDirectory(JFrame frame)
@@ -116,7 +117,7 @@ public class App
 	{
 
 		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
+		setJMenuBar(menuBar);
 
 		JMenu fileMenu = new JMenu("File");
 		menuBar.add(fileMenu);
