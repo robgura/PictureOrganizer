@@ -1,3 +1,7 @@
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
@@ -5,6 +9,7 @@ import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.imageio.ImageIO;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
@@ -26,6 +31,8 @@ public class MediaData
 		initFileInfo(file);
 		
 		initExifInfo(file);
+		
+		initThumbnail(file);
 	}
 
 	public String getExt()
@@ -39,6 +46,16 @@ public class MediaData
 		if(exifDate != null) return TimeSource.EXIF;
 		if(mtime != null) return TimeSource.FILE_MTIME;
 		return TimeSource.UNKOWN;
+	}
+
+	public BufferedImage getImage()
+	{
+		if(image == null)
+		{
+			return defaultImage;
+		}
+		
+		return image;
 	}
 
 	public Calendar getCreationDate()
@@ -70,6 +87,7 @@ public class MediaData
 		return ext != null && (    ext.compareTo("mpg") == 0 
 						        || ext.compareTo("avi") == 0
 						        || ext.compareTo("mpeg") == 0
+						        || ext.compareTo("mts") == 0
 						        || ext.compareTo("mov") == 0
 						      );
 	}
@@ -160,7 +178,7 @@ public class MediaData
 		Matcher m = p.matcher(fileNameNoExt);
 		if(m.matches())
 		{
-			String[] pieces = fileNameNoExt.split("[-|_]");
+			String[] pieces = fileNameNoExt.split("[-|_| ]");
 			if(pieces.length >= 7)
 			{
 				try{
@@ -181,6 +199,39 @@ public class MediaData
 			}
 		}
 	}
+	
+	private void initThumbnail(File file)
+	{
+		if(defaultImage == null)
+		{
+			int newH = 70;
+			int newW = 70;
+			
+			defaultImage = new BufferedImage(newW, newH, BufferedImage.TYPE_3BYTE_BGR);
+			Graphics2D g = defaultImage.createGraphics();
+			g.setColor(Color.BLUE);
+			g.drawLine(newW, 0, 0, newH);
+			g.setColor(Color.RED);
+			g.drawLine(newW, newH, 0, 0);
+			g.dispose();
+		}
+	}
+	
+	private void createThumbnail(File file) throws IOException
+	{
+		if(isImage())
+		{
+			BufferedImage imageFromFile = ImageIO.read(file);
+			double scale = 70.0 / (double) imageFromFile.getHeight();
+			int newH = 70;
+			int newW = (int) (imageFromFile.getWidth() * scale);
+	
+			image = new BufferedImage(newW, newH, imageFromFile.getType());
+			Graphics2D g = image.createGraphics();
+			g.drawImage(imageFromFile, 0, 0, newW, newH, null);
+			g.dispose();
+		}
+	}
 
 	private String path;
 	private String fileNameNoExt;
@@ -189,6 +240,8 @@ public class MediaData
 	private Calendar mtime;
 	private Calendar fileNameTime;
 	private String cameraModel;
+	private BufferedImage image;
+	private static BufferedImage defaultImage;
 
 
 }

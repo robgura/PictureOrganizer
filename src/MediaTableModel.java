@@ -1,14 +1,11 @@
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.ImageIcon;
+import javax.swing.JProgressBar;
 import javax.swing.table.AbstractTableModel;
-import com.drew.imaging.ImageProcessingException;
 
 
 @SuppressWarnings("serial")
@@ -18,20 +15,43 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 	public static final int PATH_COLUMN = 0;
 	public static final int MODEL_COLUMN = 3;
 	public static final int DATE_COLUMN = 4;
+	public static final int IMAGE_COLUMN = 1;
 	
-	private int rowCount;
 	private ArrayList<MediaData> mediaDatas;
 	
-	MediaTableModel()
+	private JProgressBar progressBar;
+	
+	MediaTableModel(JProgressBar _progressBar)
 	{
+		progressBar = _progressBar;
 		CurrentDirectoryMgr.Get().addObserver(this);
-		rowCount = 10;
 	}
 	
 	@Override
 	public int getColumnCount()
 	{
 		return 6;
+	}
+
+	@Override
+	public String getColumnName(int column)
+	{
+		if(column == PATH_COLUMN)
+		{
+			return "Source Path";
+		}
+		
+		if(column == MODEL_COLUMN)
+		{
+			return "Model";
+		}
+			
+		if(column == DATE_COLUMN)
+		{
+			return "Date";
+		}
+		
+		return super.getColumnName(column);
 	}
 
 	@Override
@@ -53,9 +73,9 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 		{
 			return data.getPath();
 		}
-		if(column == 1)
+		if(column == IMAGE_COLUMN)
 		{
-			return data.getFileNameNoExt();
+			return new ImageIcon(data.getImage());
 		}
 		
 		if(column == 2)
@@ -82,18 +102,16 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 	}
 	
 
-	/*
 	@Override
 	public Class<?> getColumnClass(int columnIndex)
 	{
-		if(columnIndex == DATE_COLUMN)
+		if(columnIndex == IMAGE_COLUMN)
 		{
-			return GregorianCalendar.class;
+			return ImageIcon.class;
 		}
 		
 		return super.getColumnClass(columnIndex);
 	}
-	*/
 
 	@Override
 	public void update(Observable arg0, Object objNewDir)
@@ -108,6 +126,11 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 		HackFileNameExtensionFilter filter = new HackFileNameExtensionFilter("Media", "jpg", "jpeg", "avi", "mts", "mpg", "mpeg");
 		File[] mediaFiles = directory.listFiles(filter);
 		
+		progressBar.setValue(0);
+		progressBar.setMinimum(0);
+		progressBar.setMaximum(mediaFiles.length);
+		progressBar.setStringPainted(true);
+		
 		mediaDatas = new ArrayList<MediaData>(mediaFiles.length);
 		
 		for(int i = 0; i < mediaFiles.length; ++i)
@@ -120,6 +143,8 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 			{
 				System.out.println("Found non media type " + mediaFiles[i].getAbsolutePath());
 			}
+			progressBar.setValue(i);
+			System.out.println(progressBar);
 		}
 	}
 

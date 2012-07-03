@@ -5,8 +5,10 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.event.KeyEvent;
@@ -24,6 +26,7 @@ public class App extends JFrame
 {
 
 	private JTable table;
+	private JProgressBar progressBar;
 
 	/**
 	 * Launch the application.
@@ -71,19 +74,22 @@ public class App extends JFrame
 		
 		initMenuBar();
 
+		initProgressBar();
+		
 		initChooseDirectory(getContentPane());
-
+		
 		initTable();
 	}
 
 	private void initTable()
 	{
-		AbstractTableModel tableModel = new MediaTableModel();
+		AbstractTableModel tableModel = new MediaTableModel(progressBar);
 		table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
 		table.setAutoCreateRowSorter(true);
+		table.setRowHeight(90);
 	}
 
 	private void initFrame()
@@ -91,6 +97,12 @@ public class App extends JFrame
 		setBounds(100, 100, 450, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout());
+	}
+	
+	private void initProgressBar()
+	{
+		progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
+		getContentPane().add(progressBar, BorderLayout.SOUTH);
 	}
 
 	private static void initChooseDirectory(Container contentPane)
