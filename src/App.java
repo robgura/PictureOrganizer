@@ -1,3 +1,4 @@
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -15,12 +16,13 @@ import javax.swing.JButton;
 import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 
 @SuppressWarnings("serial")
 public class App extends JFrame
 {
 
-	//private JFrame frame;
 	private JTable table;
 
 	/**
@@ -69,34 +71,32 @@ public class App extends JFrame
 		
 		initMenuBar();
 
-		initChooseDirectory(this);
+		initChooseDirectory(getContentPane());
 
 		initTable();
 	}
 
 	private void initTable()
 	{
-		table = new JTable(new MediaTableModel());
-		table.setFillsViewportHeight(true);
-		table.setPreferredSize(new Dimension(800, 600));
-
-		JPanel centerPanel = new JPanel();
+		AbstractTableModel tableModel = new MediaTableModel();
+		table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
-		centerPanel.add(scrollPane);
-		getContentPane().add(centerPanel, BorderLayout.CENTER);
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		
+		table.setAutoCreateRowSorter(true);
 	}
 
 	private void initFrame()
 	{
 		setBounds(100, 100, 450, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(new BorderLayout(0, 0));
+		getContentPane().setLayout(new BorderLayout());
 	}
 
-	private static void initChooseDirectory(JFrame frame)
+	private static void initChooseDirectory(Container contentPane)
 	{
 		JPanel northPanel = new JPanel();
-		frame.getContentPane().add(northPanel, BorderLayout.NORTH);
+		contentPane.add(northPanel, BorderLayout.NORTH);
 
 		ChooseDirectoryButtonHandler chooseDirectoryButtonHandler = new ChooseDirectoryButtonHandler(northPanel);
 

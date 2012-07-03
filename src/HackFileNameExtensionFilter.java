@@ -13,9 +13,13 @@ public class HackFileNameExtensionFilter implements FileFilter
 	}
 
 	@Override
-	public boolean accept(File arg0)
+	public boolean accept(File file)
 	{
-		return realFilter.accept(arg0);
+		if(file.isFile())
+		{
+			return realFilter.accept(file);
+		}
+		return false;
 	}
 
 }

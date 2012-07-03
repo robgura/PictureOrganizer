@@ -2,6 +2,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
@@ -140,8 +143,43 @@ public class MediaData
 			}
 		}
 		
+		getDateFromModifiedTime(file);
+		
+		getDateFromFileName();
+	}
+
+	private void getDateFromModifiedTime(File file)
+	{
 		mtime = Calendar.getInstance();
 		mtime.setTimeInMillis(file.lastModified());
+	}
+
+	private void getDateFromFileName()
+	{
+		Pattern p = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}__[0-9]{2}-[0-9]{2}-[0-9]{2}.*");
+		Matcher m = p.matcher(fileNameNoExt);
+		if(m.matches())
+		{
+			String[] pieces = fileNameNoExt.split("[-|_]");
+			if(pieces.length >= 7)
+			{
+				try{
+				fileNameTime = Calendar.getInstance();
+				fileNameTime.set( Integer.parseInt(pieces[0])		// year
+								, Integer.parseInt(pieces[1]) - 1	// month
+								, Integer.parseInt(pieces[2])       // day
+								, Integer.parseInt(pieces[4])       // hour (skip one since there are two underscores
+								, Integer.parseInt(pieces[5])       // minute
+								, Integer.parseInt(pieces[6])       // second
+							    );
+				}
+				catch (NumberFormatException e)
+				{
+					System.out.println(e.getMessage());
+					System.out.println(fileNameNoExt);
+				}
+			}
+		}
 	}
 
 	private String path;

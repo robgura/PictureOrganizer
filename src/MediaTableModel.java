@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Observable;
 import java.util.Observer;
@@ -14,6 +15,10 @@ import com.drew.imaging.ImageProcessingException;
 public class MediaTableModel extends AbstractTableModel implements Observer
 {
 
+	public static final int PATH_COLUMN = 0;
+	public static final int MODEL_COLUMN = 3;
+	public static final int DATE_COLUMN = 4;
+	
 	private int rowCount;
 	private ArrayList<MediaData> mediaDatas;
 	
@@ -26,7 +31,7 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 	@Override
 	public int getColumnCount()
 	{
-		return 5;
+		return 6;
 	}
 
 	@Override
@@ -44,7 +49,7 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 	{
 		MediaData data = mediaDatas.get(row);
 		
-		if(column == 0)
+		if(column == PATH_COLUMN)
 		{
 			return data.getPath();
 		}
@@ -58,14 +63,14 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 			return data.getExt();
 		}
 		
-		if(column == 3)
+		if(column == MODEL_COLUMN)
 		{
 			return data.getCameraModel();
 		}
 		
-		if(column == 4)
+		if(column == DATE_COLUMN)
 		{
-			return data.getCreationDate();
+			return new Date(data.getCreationDate().getTimeInMillis());
 		}
 		
 		if(column == 5)
@@ -77,16 +82,18 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 	}
 	
 
+	/*
 	@Override
 	public Class<?> getColumnClass(int columnIndex)
 	{
-		if(columnIndex == 5)
+		if(columnIndex == DATE_COLUMN)
 		{
 			return GregorianCalendar.class;
 		}
 		
 		return super.getColumnClass(columnIndex);
 	}
+	*/
 
 	@Override
 	public void update(Observable arg0, Object objNewDir)
@@ -98,7 +105,7 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 	
 	private void loadDirectoryInfo(File directory)
 	{
-		HackFileNameExtensionFilter filter = new HackFileNameExtensionFilter("Media", "jpg", "avi", "mts");
+		HackFileNameExtensionFilter filter = new HackFileNameExtensionFilter("Media", "jpg", "jpeg", "avi", "mts", "mpg", "mpeg");
 		File[] mediaFiles = directory.listFiles(filter);
 		
 		mediaDatas = new ArrayList<MediaData>(mediaFiles.length);
@@ -111,8 +118,7 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 			}
 			catch (NotMedia e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Found non media type " + mediaFiles[i].getAbsolutePath());
 			}
 		}
 	}
