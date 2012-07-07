@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.ImageIcon;
-import javax.swing.JProgressBar;
 import javax.swing.table.AbstractTableModel;
 
 
@@ -19,11 +18,8 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 	
 	private ArrayList<MediaData> mediaDatas;
 	
-	private JProgressBar progressBar;
-	
-	MediaTableModel(JProgressBar _progressBar)
+	MediaTableModel()
 	{
-		progressBar = _progressBar;
 		CurrentDirectoryMgr.Get().addObserver(this);
 	}
 	
@@ -126,11 +122,6 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 		HackFileNameExtensionFilter filter = new HackFileNameExtensionFilter("Media", "jpg", "jpeg", "avi", "mts", "mpg", "mpeg");
 		File[] mediaFiles = directory.listFiles(filter);
 		
-		progressBar.setValue(0);
-		progressBar.setMinimum(0);
-		progressBar.setMaximum(mediaFiles.length);
-		progressBar.setStringPainted(true);
-		
 		mediaDatas = new ArrayList<MediaData>(mediaFiles.length);
 		
 		for(int i = 0; i < mediaFiles.length; ++i)
@@ -143,8 +134,6 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 			{
 				System.out.println("Found non media type " + mediaFiles[i].getAbsolutePath());
 			}
-			progressBar.setValue(i);
-			System.out.println(progressBar);
 		}
 	}
 
