@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
 public class App extends JFrame

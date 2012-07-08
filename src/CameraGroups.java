@@ -1,9 +1,6 @@
 import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 

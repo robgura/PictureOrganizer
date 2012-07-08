@@ -1,8 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
