@@ -4,17 +4,16 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 
-public class CameraGroups
+public class CameraGroupsView
 {
 
-	public CameraGroups(JPanel inPanel)
+	public CameraGroupsView(JPanel inPanel, MediaTableModel _model)
 	{
 		panel = inPanel;
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		model = _model;
 	}
 	
-	private JPanel panel;
-
 	public void resetGroups()
 	{
 		panel.removeAll();
@@ -22,7 +21,10 @@ public class CameraGroups
 		while(iter.hasNext())
 		{
 			Entry<String, GroupData> entry = iter.next();
-			panel.add(new CameraGroupInfo(entry.getKey(), entry.getValue()));
+			panel.add(new CameraGroupView(entry.getValue(), model));
 		}
 	}
+
+	private JPanel panel;
+	private MediaTableModel model;
 }

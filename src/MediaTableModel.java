@@ -16,8 +16,6 @@ public class MediaTableModel extends AbstractTableModel
 	
 	public static final int COLUMN_COUNT = 5;
 	
-	private ArrayList<MediaData> mediaDatas;
-	
 	@Override
 	public int getColumnCount()
 	{
@@ -82,7 +80,7 @@ public class MediaTableModel extends AbstractTableModel
 		
 		if(column == GROUP_COLUMN)
 		{
-			return data.getGroupName();
+			return data.getGroupData().getName();
 		}
 		
 		if(column == MODEL_COLUMN)
@@ -121,9 +119,22 @@ public class MediaTableModel extends AbstractTableModel
 		fireTableDataChanged();
 	}
 	
+	public void updateGroup(String name)
+	{
+		int i = 0;
+		for(MediaData mediaData :  mediaDatas)
+		{
+			if(mediaData.getGroupData().getName().compareTo(name) == 0)
+			{
+				this.fireTableCellUpdated(i, DATE_COLUMN);
+			}
+			++i;
+		}
+	}
+
 	private void loadDirectoryInfo(File directory)
 	{
-		HackFileNameExtensionFilter filter = new HackFileNameExtensionFilter("Media", "jpg", "jpeg", "avi", "mts", "mpg", "mpeg");
+		HackFileNameExtensionFilter filter = new HackFileNameExtensionFilter("Media", "jpg", "jpeg", "avi", "mts", "mpg", "mpeg", "mov");
 		File[] mediaFiles = directory.listFiles(filter);
 		
 		mediaDatas = new ArrayList<MediaData>(mediaFiles.length);
@@ -134,7 +145,8 @@ public class MediaTableModel extends AbstractTableModel
 			{
 				MediaData mediaData = new MediaData(mediaFiles[i]);
 				mediaDatas.add(mediaData);
-				CameraGroupMgr.getInstance().addCameraGroup(mediaData.getCameraModel());
+				GroupData groupData = CameraGroupMgr.getInstance().addCameraGroup(mediaData.getCameraModel());
+				mediaData.setGroupData(groupData);
 			}
 			catch (NotMedia e)
 			{
@@ -142,5 +154,7 @@ public class MediaTableModel extends AbstractTableModel
 			}
 		}
 	}
+
+	private ArrayList<MediaData> mediaDatas;
 
 }

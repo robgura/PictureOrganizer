@@ -48,7 +48,13 @@ public class App extends JFrame
 		{
 			e.printStackTrace();
 		}
+		catch(NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 	}
+
+	private MediaTableModel tableModel;
 
 	/**
 	 * Create the application.
@@ -80,14 +86,14 @@ public class App extends JFrame
 	{
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.WEST);
-		CameraGroups cameraGroups = new CameraGroups(panel);
+		CameraGroupsView cameraGroups = new CameraGroupsView(panel, tableModel);
 		
 		currentDirectoryMgr.setCameraGroups(cameraGroups);
 	}
 	
 	private void initTable()
 	{
-		MediaTableModel tableModel = new MediaTableModel();
+		tableModel = new MediaTableModel();
 		table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);

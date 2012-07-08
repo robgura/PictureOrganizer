@@ -4,15 +4,18 @@ import java.util.TreeMap;
 public class CameraGroupMgr
 {
 	
-	public void addCameraGroup(String groupName)
+	public GroupData addCameraGroup(String groupName)
 	{
-		if(groupName == null) return;
+		if(groupName == null)
+		{
+			groupName = "UNKOWN";
+		}
 		
 		GroupData foundGroup = groups.get(groupName);
 		
 		if(foundGroup == null)
 		{
-			foundGroup = new GroupData();
+			foundGroup = new GroupData(groupName);
 			foundGroup.adjSeconds = 0;
 			foundGroup.mediaCount = 1;
 			groups.put(groupName,  foundGroup);
@@ -21,6 +24,8 @@ public class CameraGroupMgr
 		{
 			foundGroup.mediaCount++;
 		}
+		
+		return foundGroup;
 	}
 	
 	public static CameraGroupMgr getInstance()
@@ -35,17 +40,6 @@ public class CameraGroupMgr
 	public void reset()
 	{
 		groups = new TreeMap<String, GroupData>();
-	}
-	
-	public void updateTime(String groupName, Integer value) throws CameraGroupNotFound
-	{
-		GroupData group = groups.get(groupName);
-		if(group == null)
-		{
-			throw new CameraGroupNotFound(groupName);
-		}
-		
-		group.adjSeconds = value.intValue();
 	}
 	
 	public TreeMap<String, GroupData> getGroups()

@@ -27,7 +27,7 @@ public class CurrentDirectoryMgr
 		this.mediaTableModel = mediaTableModel;
 	}
 
-	public void setCameraGroups(CameraGroups cameraGroups)
+	public void setCameraGroups(CameraGroupsView cameraGroups)
 	{
 		this.cameraGroups = cameraGroups;
 	}
@@ -41,7 +41,7 @@ public class CurrentDirectoryMgr
 	
 	private MediaTableModel mediaTableModel;
 	
-	private CameraGroups cameraGroups;
+	private CameraGroupsView cameraGroups;
 
 	private JLabel jLabel;
 

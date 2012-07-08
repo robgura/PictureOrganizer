@@ -11,16 +11,18 @@ import javax.swing.event.ChangeListener;
 
 
 @SuppressWarnings("serial")
-public class CameraGroupInfo extends javax.swing.JPanel implements ChangeListener
+public class CameraGroupView extends javax.swing.JPanel implements ChangeListener
 {
 
-	public CameraGroupInfo(String _groupName, GroupData groupData)
+	public CameraGroupView(GroupData _groupData, MediaTableModel _model)
 	{
+		groupData = _groupData;
+		tableModel = _model;
+		
 		setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-		groupName = _groupName;
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		add(new JLabel(groupName + "(" + Integer.toString(groupData.mediaCount) + ")"));
+		add(new JLabel(groupData.getName() + " (" + Integer.toString(groupData.mediaCount) + ")"));
 		
 		spinner = new JSpinner();
 		spinner.addChangeListener(this);
@@ -36,20 +38,14 @@ public class CameraGroupInfo extends javax.swing.JPanel implements ChangeListene
 	{
 		if(event.getSource() == spinner)
 		{
-			try
-			{
-				SpinnerModel model = spinner.getModel();
-				CameraGroupMgr.getInstance().updateTime(groupName, (Integer) model.getValue());
-			}
-			catch (CameraGroupNotFound e)
-			{
-				System.err.println("Could not find group name" + e.groupName);
-				e.printStackTrace();
-			}
+			SpinnerModel model = spinner.getModel();
+			groupData.adjSeconds = ((Integer) model.getValue()).intValue();
+			tableModel.updateGroup(groupData.getName());
 		}
 	}
 	
-	private String groupName;
+	private GroupData groupData;
 	private JSpinner spinner;
+	private MediaTableModel tableModel;
 
 }

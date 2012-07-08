@@ -58,11 +58,19 @@ public class MediaData
 
 	public Calendar getCreationDate()
 	{
+		Calendar val = null;
 		TimeSource t = getTimeSource();
-		if(t == TimeSource.FILE_MTIME) return mtime;
-		if(t == TimeSource.FILE_NAME) return fileNameTime;
-		if(t == TimeSource.EXIF) return exifDate;
-		return null;
+		if(t == TimeSource.FILE_MTIME) val = mtime;
+		if(t == TimeSource.FILE_NAME) val = fileNameTime;
+		if(t == TimeSource.EXIF) val = exifDate;
+		
+		Calendar newGuy = null;
+		if(val != null)
+		{
+			newGuy = Calendar.getInstance();
+			newGuy.setTimeInMillis(val.getTimeInMillis() + (groupData.adjSeconds * 1000));
+		}
+		return newGuy;
 	}
 
 	public String getCameraModel()
@@ -70,18 +78,14 @@ public class MediaData
 		return cameraModel;
 	}
 	
-	public String getGroupName()
+	public void setGroupData(GroupData _groupData)
 	{
-		if(groupName != null) return groupName;
-		
-		if(getCameraModel() != null) return getCameraModel();
-		
-		return "UNKOWN";
+		groupData = _groupData;
 	}
-
-	public void setGroupName(String groupName)
+	
+	public GroupData getGroupData()
 	{
-		this.groupName = groupName;
+		return groupData;
 	}
 
 	public String getPath()
@@ -259,12 +263,12 @@ public class MediaData
 	private String path;
 	private String fileNameNoExt;
 	private String ext;
-	private String groupName;
 	private Calendar exifDate;
 	private Calendar mtime;
 	private Calendar fileNameTime;
 	private String cameraModel;
 	private BufferedImage image;
+	private GroupData groupData;
 	private static BufferedImage defaultImage;
 
 
