@@ -8,33 +8,35 @@ import javax.swing.table.AbstractTableModel;
 
 
 @SuppressWarnings("serial")
-public class MediaTableModel extends AbstractTableModel implements Observer
+public class MediaTableModel extends AbstractTableModel
 {
-
-	public static final int PATH_COLUMN = 0;
+	public static final int FILE_NAME_COLUMN = 0;
+	public static final int GROUP_COLUMN = 1;
+	public static final int IMAGE_COLUMN = 2;
 	public static final int MODEL_COLUMN = 3;
 	public static final int DATE_COLUMN = 4;
-	public static final int IMAGE_COLUMN = 1;
+	
+	public static final int COLUMN_COUNT = 5;
 	
 	private ArrayList<MediaData> mediaDatas;
-	
-	MediaTableModel()
-	{
-		CurrentDirectoryMgr.Get().addObserver(this);
-	}
 	
 	@Override
 	public int getColumnCount()
 	{
-		return 6;
+		return COLUMN_COUNT;
 	}
 
 	@Override
 	public String getColumnName(int column)
 	{
-		if(column == PATH_COLUMN)
+		if(column == FILE_NAME_COLUMN)
 		{
-			return "Source Path";
+			return "File Name";
+		}
+		
+		if(column == GROUP_COLUMN)
+		{
+			return "Group";
 		}
 		
 		if(column == MODEL_COLUMN)
@@ -45,6 +47,11 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 		if(column == DATE_COLUMN)
 		{
 			return "Date";
+		}
+		
+		if(column == IMAGE_COLUMN)
+		{
+			return "Image";
 		}
 		
 		return super.getColumnName(column);
@@ -65,18 +72,19 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 	{
 		MediaData data = mediaDatas.get(row);
 		
-		if(column == PATH_COLUMN)
+		if(column == FILE_NAME_COLUMN)
 		{
-			return data.getPath();
+			return data.getFileName();
 		}
+		
 		if(column == IMAGE_COLUMN)
 		{
 			return new ImageIcon(data.getImage());
 		}
 		
-		if(column == 2)
+		if(column == GROUP_COLUMN)
 		{
-			return data.getExt();
+			return data.getGroupName();
 		}
 		
 		if(column == MODEL_COLUMN)
@@ -109,10 +117,8 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 		return super.getColumnClass(columnIndex);
 	}
 
-	@Override
-	public void update(Observable arg0, Object objNewDir)
+	public void readDirectory(File newDir)
 	{
-		File newDir = (File) objNewDir;
 		loadDirectoryInfo(newDir);
 		fireTableDataChanged();
 	}
@@ -128,11 +134,13 @@ public class MediaTableModel extends AbstractTableModel implements Observer
 		{
 			try
 			{
-				mediaDatas.add(new MediaData(mediaFiles[i]));
+				MediaData mediaData = new MediaData(mediaFiles[i]);
+				mediaDatas.add(mediaData);
+				CameraGroupMgr.getInstance().addCameraGroup(mediaData.getCameraModel());
 			}
 			catch (NotMedia e)
 			{
-				System.out.println("Found non media type " + mediaFiles[i].getAbsolutePath());
+				System.err.println("Found non media type " + mediaFiles[i].getAbsolutePath());
 			}
 		}
 	}

@@ -69,6 +69,20 @@ public class MediaData
 	{
 		return cameraModel;
 	}
+	
+	public String getGroupName()
+	{
+		if(groupName != null) return groupName;
+		
+		if(getCameraModel() != null) return getCameraModel();
+		
+		return "UNKOWN";
+	}
+
+	public void setGroupName(String groupName)
+	{
+		this.groupName = groupName;
+	}
 
 	public String getPath()
 	{
@@ -105,6 +119,11 @@ public class MediaData
 		return fileNameNoExt;
 	}
 	
+	public String getFileName()
+	{
+		return getFileNameNoExt();
+	}
+
 	private void initExifInfo(File jpgFile)
 	{
 		if(isJpg())
@@ -115,16 +134,22 @@ public class MediaData
 				// jar can be found in metadata-extrator zip file
 				Metadata metadata = ImageMetadataReader.readMetadata(jpgFile);
 				Directory dateDir = metadata.getDirectory(ExifSubIFDDirectory.class);
-				Date date = dateDir.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
-				
-				if(date != null)
+				if(dateDir != null)
 				{
-					exifDate = Calendar.getInstance();
-					exifDate.setTime(date);
+					Date date = dateDir.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL);
+
+					if(date != null)
+					{
+						exifDate = Calendar.getInstance();
+						exifDate.setTime(date);
+					}
 				}
-				
+
 				Directory modelDir = metadata.getDirectory(ExifIFD0Directory.class);
-				cameraModel = modelDir.getString(ExifIFD0Directory.TAG_MODEL);
+				if(modelDir != null)
+				{
+					cameraModel = modelDir.getString(ExifIFD0Directory.TAG_MODEL);
+				}
 			}
 			catch (ImageProcessingException e)
 			{
@@ -191,8 +216,8 @@ public class MediaData
 				}
 				catch (NumberFormatException e)
 				{
-					System.out.println(e.getMessage());
-					System.out.println(fileNameNoExt);
+					System.err.println(e.getMessage());
+					System.err.println(fileNameNoExt);
 				}
 			}
 		}
@@ -234,6 +259,7 @@ public class MediaData
 	private String path;
 	private String fileNameNoExt;
 	private String ext;
+	private String groupName;
 	private Calendar exifDate;
 	private Calendar mtime;
 	private Calendar fileNameTime;

@@ -1,5 +1,6 @@
 import java.awt.Container;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -19,9 +20,6 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class App extends JFrame
 {
-
-	private JTable table;
-	private CameraModelInfo modelInfo;
 
 	/**
 	 * Launch the application.
@@ -64,7 +62,9 @@ public class App extends JFrame
 	public App() throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException
 	{
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
+		
+		currentDirectoryMgr = new CurrentDirectoryMgr();
+		
 		initFrame();
 		
 		initMenuBar();
@@ -74,24 +74,29 @@ public class App extends JFrame
 		initTable();
 		
 		initModelInfo();
+		
 	}
 
 	private void initModelInfo()
 	{
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.WEST);
-		modelInfo = new CameraModelInfo(panel);
+		CameraGroups cameraGroups = new CameraGroups(panel);
+		
+		currentDirectoryMgr.setCameraGroups(cameraGroups);
 	}
 	
 	private void initTable()
 	{
-		AbstractTableModel tableModel = new MediaTableModel();
+		MediaTableModel tableModel = new MediaTableModel();
 		table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
 		table.setAutoCreateRowSorter(true);
 		table.setRowHeight(90);
+		
+		currentDirectoryMgr.setMediaTableModel(tableModel);
 	}
 
 	private void initFrame()
@@ -101,12 +106,12 @@ public class App extends JFrame
 		getContentPane().setLayout(new BorderLayout());
 	}
 	
-	private static void initChooseDirectory(Container contentPane)
+	private void initChooseDirectory(Container contentPane)
 	{
 		JPanel northPanel = new JPanel();
 		contentPane.add(northPanel, BorderLayout.NORTH);
 
-		ChooseDirectoryButtonHandler chooseDirectoryButtonHandler = new ChooseDirectoryButtonHandler(northPanel);
+		ChooseDirectoryButtonHandler chooseDirectoryButtonHandler = new ChooseDirectoryButtonHandler(northPanel, currentDirectoryMgr);
 
 		Box horizontalBox = Box.createHorizontalBox();
 		northPanel.add(horizontalBox);
@@ -116,9 +121,9 @@ public class App extends JFrame
 		chooseDirectoryButton.addActionListener(chooseDirectoryButtonHandler);
 		horizontalBox.add(chooseDirectoryButton);
 
-		CurrentDirectoryJLabel selectedDirectoryLabel = new CurrentDirectoryJLabel();
-		CurrentDirectoryMgr.Get().addObserver(selectedDirectoryLabel);
+		JLabel selectedDirectoryLabel = new JLabel();
 		horizontalBox.add(selectedDirectoryLabel);
+		currentDirectoryMgr.setjLabel(selectedDirectoryLabel);
 	}
 
 	private void initMenuBar()
@@ -135,5 +140,8 @@ public class App extends JFrame
 		fileMenu.add(fileOpenMenu);
 
 	}
+	
+	private JTable table;
+	private CurrentDirectoryMgr currentDirectoryMgr;
 
 }

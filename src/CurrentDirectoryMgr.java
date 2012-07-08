@@ -1,16 +1,21 @@
 import java.io.File;
 import java.util.Observable;
+import javax.swing.JLabel;
 
 
-public class CurrentDirectoryMgr extends Observable
+public class CurrentDirectoryMgr
 {
-	public static CurrentDirectoryMgr Get()
+	public void setNewFile(File f)
 	{
-		if(single == null)
-		{
-			single = new CurrentDirectoryMgr();
-		}
-		return single;
+		file = f;
+		
+		CameraGroupMgr.getInstance().reset();
+		
+		mediaTableModel.readDirectory(f);
+		
+		cameraGroups.resetGroups();
+		
+		jLabel.setText(f.getAbsolutePath());
 	}
 
 	public File getFile()
@@ -18,20 +23,28 @@ public class CurrentDirectoryMgr extends Observable
 		return file;
 	}
 
-	public void setFile(File f)
+	public void setMediaTableModel(MediaTableModel mediaTableModel)
 	{
-		
-		file = f;
-		this.setChanged();
-		notifyObservers(f);
+		this.mediaTableModel = mediaTableModel;
+	}
+
+	public void setCameraGroups(CameraGroups cameraGroups)
+	{
+		this.cameraGroups = cameraGroups;
+	}
+
+	public void setjLabel(JLabel jLabel)
+	{
+		this.jLabel = jLabel;
 	}
 
 	private File file;
 	
-	private static CurrentDirectoryMgr single = null;
+	private MediaTableModel mediaTableModel;
+	
+	private CameraGroups cameraGroups;
 
-	private CurrentDirectoryMgr()
-	{
-	}
+	private JLabel jLabel;
+
 
 }

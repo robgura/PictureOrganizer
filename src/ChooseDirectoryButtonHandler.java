@@ -6,13 +6,14 @@ import javax.swing.JFileChooser;
 
 public class ChooseDirectoryButtonHandler implements ActionListener
 {
-
 	private Component parent;
+	
+	private CurrentDirectoryMgr mgr;
 
-	public ChooseDirectoryButtonHandler(Component parent)
+	public ChooseDirectoryButtonHandler(Component parent, CurrentDirectoryMgr mgr)
 	{
-		super();
 		this.parent = parent;
+		this.mgr = mgr;
 	}
 
 	@Override
@@ -26,7 +27,7 @@ public class ChooseDirectoryButtonHandler implements ActionListener
 	
 		if(ret == JFileChooser.APPROVE_OPTION)
 		{
-			CurrentDirectoryMgr.Get().setFile(fileChooser.getSelectedFile());
+			mgr.setNewFile(fileChooser.getSelectedFile());
 		}
 	}
 

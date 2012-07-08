@@ -9,6 +9,7 @@ import javax.swing.JLabel;
  * @author Rob
  *
  */
+/*
 @SuppressWarnings("serial")
 public class CurrentDirectoryJLabel extends JLabel implements Observer
 {
@@ -27,3 +28,4 @@ public class CurrentDirectoryJLabel extends JLabel implements Observer
 	}
 
 }
+*/
