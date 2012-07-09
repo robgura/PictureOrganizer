@@ -24,13 +24,15 @@ public class MediaData
 		FILE_MTIME,
 		UNKOWN
 	}
-	public MediaData(File file) throws NotMedia
+	public MediaData(File _file) throws NotMedia
 	{
-		initFileInfo(file);
+		file = _file;
+
+		initFileInfo();
 		
-		initExifInfo(file);
+		initExifInfo();
 		
-		initThumbnail(file);
+		initThumbnail();
 	}
 
 	public String getExt()
@@ -128,7 +130,31 @@ public class MediaData
 		return getFileNameNoExt();
 	}
 
-	private void initExifInfo(File jpgFile)
+	public void createThumbnail()
+	{
+		if(isImage())
+		{
+			try
+			{
+				BufferedImage imageFromFile;
+				imageFromFile = ImageIO.read(file);
+				double scale = 70.0 / (double) imageFromFile.getHeight();
+				int newH = 70;
+				int newW = (int) (imageFromFile.getWidth() * scale);
+	
+				image = new BufferedImage(newW, newH, imageFromFile.getType());
+				Graphics2D g = image.createGraphics();
+				g.drawImage(imageFromFile, 0, 0, newW, newH, null);
+				g.dispose();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void initExifInfo()
 	{
 		if(isJpg())
 		{
@@ -136,7 +162,7 @@ public class MediaData
 			{
 				//ClassNotFoundException indicates xmpcore is not in classpath
 				// jar can be found in metadata-extrator zip file
-				Metadata metadata = ImageMetadataReader.readMetadata(jpgFile);
+				Metadata metadata = ImageMetadataReader.readMetadata(file);
 				Directory dateDir = metadata.getDirectory(ExifSubIFDDirectory.class);
 				if(dateDir != null)
 				{
@@ -168,7 +194,7 @@ public class MediaData
 		}
 	}
 
-	private void initFileInfo(File file) throws NotMedia
+	private void initFileInfo() throws NotMedia
 	{
 		path = file.getAbsolutePath();
 		int dot = path.lastIndexOf(".");
@@ -227,7 +253,7 @@ public class MediaData
 		}
 	}
 	
-	private void initThumbnail(File file)
+	private void initThumbnail()
 	{
 		if(defaultImage == null)
 		{
@@ -244,22 +270,7 @@ public class MediaData
 		}
 	}
 	
-	private void createThumbnail(File file) throws IOException
-	{
-		if(isImage())
-		{
-			BufferedImage imageFromFile = ImageIO.read(file);
-			double scale = 70.0 / (double) imageFromFile.getHeight();
-			int newH = 70;
-			int newW = (int) (imageFromFile.getWidth() * scale);
-	
-			image = new BufferedImage(newW, newH, imageFromFile.getType());
-			Graphics2D g = image.createGraphics();
-			g.drawImage(imageFromFile, 0, 0, newW, newH, null);
-			g.dispose();
-		}
-	}
-
+	private File file;
 	private String path;
 	private String fileNameNoExt;
 	private String ext;

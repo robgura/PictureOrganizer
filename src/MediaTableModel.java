@@ -142,6 +142,13 @@ public class MediaTableModel extends AbstractTableModel
 		}
 	}
 
+	public void showThumbnail(int row)
+	{
+		MediaData mediaData = mediaDatas.get(row);
+		mediaData.createThumbnail();
+		this.fireTableCellUpdated(row, IMAGE_COLUMN);
+	}
+
 	private void loadDirectoryInfo(File directory)
 	{
 		HackFileNameExtensionFilter filter = new HackFileNameExtensionFilter("Media", "jpg", "jpeg", "avi", "mts", "mpg", "mpeg", "mov");

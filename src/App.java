@@ -99,8 +99,12 @@ public class App extends JFrame
 		
 		table.setAutoCreateRowSorter(true);
 		table.setRowHeight(90);
+		
+		// set calendar renderer
 		TableColumn tableColumn = table.getColumnModel().getColumn(MediaTableModel.DATE_COLUMN);
 		tableColumn.setCellRenderer(new CalendarRenderer());
+		
+		table.addMouseListener(new JTableDoubleClickListener());
 		
 		JScrollPane scrollPane = new JScrollPane(table);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
