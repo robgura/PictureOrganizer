@@ -4,7 +4,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ChangeEvent;
@@ -16,7 +15,6 @@ import javax.swing.event.ChangeListener;
 public class CameraGroupView extends javax.swing.JPanel implements ChangeListener
 {
 
-	private JSpinner hourSpinner;
 	public CameraGroupView(GroupData _groupData, MediaTableModel _model)
 	{
 		groupData = _groupData;
@@ -33,6 +31,10 @@ public class CameraGroupView extends javax.swing.JPanel implements ChangeListene
 		secondSpinner = new JSpinner();
 		secondSpinner.addChangeListener(this);
 		secondSpinner.setMaximumSize(new Dimension(9000, 20));
+		
+		minuteSpinner = new JSpinner();
+		minuteSpinner.addChangeListener(this);
+		minuteSpinner.setMaximumSize(new Dimension(9000, 20));
 		
 		hourSpinner = new JSpinner();
 		hourSpinner.addChangeListener(this);
@@ -53,10 +55,13 @@ public class CameraGroupView extends javax.swing.JPanel implements ChangeListene
 	@Override
 	public void stateChanged(ChangeEvent event)
 	{
-		if(event.getSource() == secondSpinner || event.getSource() == hourSpinner || event.getSource() == daySpinner)
+		if(event.getSource() == secondSpinner || event.getSource() == minuteSpinner || event.getSource() == hourSpinner || event.getSource() == daySpinner)
 		{
 			SpinnerNumberModel secondsModel = (SpinnerNumberModel) secondSpinner.getModel();
 			long seconds = secondsModel.getNumber().longValue();
+			
+			SpinnerNumberModel minutesModel = (SpinnerNumberModel) minuteSpinner.getModel();
+			long minutes = minutesModel.getNumber().longValue();
 			
 			SpinnerNumberModel hourModel = (SpinnerNumberModel) hourSpinner.getModel();
 			long hours = hourModel.getNumber().longValue();
@@ -64,7 +69,7 @@ public class CameraGroupView extends javax.swing.JPanel implements ChangeListene
 			SpinnerNumberModel dayModel = (SpinnerNumberModel) daySpinner.getModel();
 			long days = dayModel.getNumber().longValue();
 			
-			groupData.adjSeconds = seconds + hours * 60 * 60 + days * 60 * 60 * 24;
+			groupData.adjSeconds = seconds + minutes * 60 + hours * 60 * 60 + days * 60 * 60 * 24;
 			
 			tableModel.updateGroup(groupData.getName());
 		}
@@ -72,6 +77,8 @@ public class CameraGroupView extends javax.swing.JPanel implements ChangeListene
 	
 	private GroupData groupData;
 	private JSpinner secondSpinner;
+	private JSpinner minuteSpinner;
+	private JSpinner hourSpinner;
 	private JSpinner daySpinner;
 	private MediaTableModel tableModel;
 

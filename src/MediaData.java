@@ -17,6 +17,8 @@ import com.drew.metadata.exif.ExifSubIFDDirectory;
 
 public class MediaData
 {
+	private static final int PICTURE_HEIGHT = 100;
+	
 	public enum TimeSource
 	{
 		FILE_NAME,
@@ -52,6 +54,7 @@ public class MediaData
 	{
 		if(image == null)
 		{
+			if(isMovie()) return defaultMovieImage;
 			return defaultImage;
 		}
 		
@@ -77,6 +80,10 @@ public class MediaData
 
 	public String getCameraModel()
 	{
+		if(ext.compareTo("mts") == 0)
+		{
+			return "Canon VIXIA HF200";
+		}
 		return cameraModel;
 	}
 	
@@ -138,8 +145,8 @@ public class MediaData
 			{
 				BufferedImage imageFromFile;
 				imageFromFile = ImageIO.read(file);
-				double scale = 70.0 / (double) imageFromFile.getHeight();
-				int newH = 70;
+				double scale = (double) PICTURE_HEIGHT / (double) imageFromFile.getHeight();
+				int newH = PICTURE_HEIGHT;
 				int newW = (int) (imageFromFile.getWidth() * scale);
 	
 				image = new BufferedImage(newW, newH, imageFromFile.getType());
@@ -257,8 +264,8 @@ public class MediaData
 	{
 		if(defaultImage == null)
 		{
-			int newH = 70;
-			int newW = 70;
+			int newH = PICTURE_HEIGHT;
+			int newW = PICTURE_HEIGHT;
 			
 			defaultImage = new BufferedImage(newW, newH, BufferedImage.TYPE_3BYTE_BGR);
 			Graphics2D g = defaultImage.createGraphics();
@@ -266,6 +273,22 @@ public class MediaData
 			g.drawLine(newW, 0, 0, newH);
 			g.setColor(Color.RED);
 			g.drawLine(newW, newH, 0, 0);
+			g.dispose();
+		}
+		
+		if(defaultMovieImage == null)
+		{
+			int newH = PICTURE_HEIGHT;
+			int newW = PICTURE_HEIGHT;
+			
+			defaultMovieImage = new BufferedImage(newW, newH, BufferedImage.TYPE_3BYTE_BGR);
+			Graphics2D g = defaultMovieImage.createGraphics();
+			g.setColor(Color.BLUE);
+			g.drawLine(0, newH / 3, newW, newH / 3);
+			g.setColor(Color.RED);
+			g.drawLine(0, newH * 2 / 3, newW, newH * 2 / 3);
+			g.setColor(Color.GREEN);
+			g.drawString("MOVIE", 0, PICTURE_HEIGHT / 2);
 			g.dispose();
 		}
 	}
@@ -281,6 +304,7 @@ public class MediaData
 	private BufferedImage image;
 	private GroupData groupData;
 	private static BufferedImage defaultImage;
+	private static BufferedImage defaultMovieImage;
 
 
 }

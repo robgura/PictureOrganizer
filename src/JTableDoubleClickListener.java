@@ -13,7 +13,7 @@ public class JTableDoubleClickListener implements MouseListener
 		{
 			JTable jtable = (JTable) event.getSource();
 			int row = jtable.convertRowIndexToModel(jtable.getSelectedRow());
-			int column = jtable.convertColumnIndexToModel(jtable.getSelectedColumn());
+			//int column = jtable.convertColumnIndexToModel(jtable.getSelectedColumn());
 			MediaTableModel model = (MediaTableModel) jtable.getModel();
 			model.showThumbnail(row);
 		}

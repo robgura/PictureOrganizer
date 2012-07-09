@@ -6,6 +6,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 
+@SuppressWarnings("serial")
 public class CalendarRenderer extends JLabel implements TableCellRenderer
 {
 
