@@ -87,7 +87,7 @@ public class App extends JFrame
 	{
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.WEST);
-		CameraGroupsView cameraGroups = new CameraGroupsView(panel, tableModel);
+		CameraGroupsView cameraGroups = new CameraGroupsView(panel, tableModel, table);
 		
 		currentDirectoryMgr.setCameraGroups(cameraGroups);
 	}

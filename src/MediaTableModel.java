@@ -148,6 +148,16 @@ public class MediaTableModel extends AbstractTableModel
 		this.fireTableCellUpdated(row, IMAGE_COLUMN);
 	}
 
+	public void changeGroup(int row, GroupData groupData)
+	{
+		MediaData mediaData = mediaDatas.get(row);
+		if(mediaData.getGroupData() != groupData)
+		{
+			mediaData.setGroupData(groupData);
+			this.fireTableRowsUpdated(row,  row);
+		}
+	}
+
 	private void loadDirectoryInfo(File directory)
 	{
 		HackFileNameExtensionFilter filter = new HackFileNameExtensionFilter("Media", "jpg", "jpeg", "avi", "mts", "mpg", "mpeg", "mov");

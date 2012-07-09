@@ -1,9 +1,13 @@
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ChangeEvent;
@@ -12,13 +16,14 @@ import javax.swing.event.ChangeListener;
 
 
 @SuppressWarnings("serial")
-public class CameraGroupView extends javax.swing.JPanel implements ChangeListener
+public class CameraGroupView extends javax.swing.JPanel implements ChangeListener, ActionListener
 {
 
-	public CameraGroupView(GroupData _groupData, MediaTableModel _model)
+	public CameraGroupView(GroupData _groupData, MediaTableModel _model, JTable _jtable)
 	{
 		groupData = _groupData;
 		tableModel = _model;
+		jtable = _jtable;
 		
 		setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 
@@ -46,10 +51,14 @@ public class CameraGroupView extends javax.swing.JPanel implements ChangeListene
 		
 		spinnerPanel.add(daySpinner);
 		spinnerPanel.add(hourSpinner);
+		spinnerPanel.add(minuteSpinner);
 		spinnerPanel.add(secondSpinner);
 		
 		add(spinnerPanel);
-		add(new JLabel("Useless Information"));
+		
+		JButton button = new JButton("Add Selection");
+		button.addActionListener(this);
+		add(button);
 	}
 
 	@Override
@@ -81,5 +90,17 @@ public class CameraGroupView extends javax.swing.JPanel implements ChangeListene
 	private JSpinner hourSpinner;
 	private JSpinner daySpinner;
 	private MediaTableModel tableModel;
+	private JTable jtable;
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0)
+	{
+		int[] rows = jtable.getSelectedRows();
+		for(int i = 0; i < rows.length; ++i)
+		{
+			int row = jtable.convertRowIndexToModel(rows[i]);
+			tableModel.changeGroup(row, groupData);
+		}
+	}
 
 }
