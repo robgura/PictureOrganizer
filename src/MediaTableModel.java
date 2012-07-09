@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
@@ -90,12 +91,15 @@ public class MediaTableModel extends AbstractTableModel
 		
 		if(column == DATE_COLUMN)
 		{
-			return new Date(data.getCreationDate().getTimeInMillis());
+			//return new Date(data.getCreationDate().getTimeInMillis());
+			//return data.getCreationDate().getTime();
+			return data.getCreationDate();
 		}
 		
 		if(column == 5)
 		{
-			return data.getTimeSource();
+			//return data.getTimeSource();
+			return new Long(data.getCreationDate().getTimeInMillis());
 		}
 		
 		return Integer.toString(row + 1) + " - " + Integer.toString(column + 1);
@@ -108,6 +112,11 @@ public class MediaTableModel extends AbstractTableModel
 		if(columnIndex == IMAGE_COLUMN)
 		{
 			return ImageIcon.class;
+		}
+		
+		if(columnIndex == DATE_COLUMN)
+		{
+			return Calendar.class;
 		}
 		
 		return super.getColumnClass(columnIndex);
@@ -126,7 +135,8 @@ public class MediaTableModel extends AbstractTableModel
 		{
 			if(mediaData.getGroupData().getName().compareTo(name) == 0)
 			{
-				this.fireTableCellUpdated(i, DATE_COLUMN);
+				//this.fireTableCellUpdated(i, DATE_COLUMN);
+				this.fireTableRowsUpdated(i,  i);
 			}
 			++i;
 		}

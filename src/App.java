@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 
 @SuppressWarnings("serial")
 public class App extends JFrame
@@ -95,11 +96,14 @@ public class App extends JFrame
 	{
 		tableModel = new MediaTableModel();
 		table = new JTable(tableModel);
-		JScrollPane scrollPane = new JScrollPane(table);
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
 		table.setAutoCreateRowSorter(true);
 		table.setRowHeight(90);
+		TableColumn tableColumn = table.getColumnModel().getColumn(MediaTableModel.DATE_COLUMN);
+		tableColumn.setCellRenderer(new CalendarRenderer());
+		
+		JScrollPane scrollPane = new JScrollPane(table);
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
 		currentDirectoryMgr.setMediaTableModel(tableModel);
 	}
