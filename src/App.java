@@ -19,6 +19,7 @@ import javax.swing.table.TableColumn;
 import cameragroup.view.CameraGroupsView;
 import directory.ChooseDirectoryButtonHandler;
 import directory.CurrentDirectoryMgr;
+import rename.RenameFilesButtonhandler;
 import table.model.MediaTableModel;
 import table.view.CalendarRenderer;
 import table.view.JTableDoubleClickListener;
@@ -61,7 +62,7 @@ public class App extends JFrame
 		}
 	}
 
-	private MediaTableModel tableModel;
+	private Box northHorizontalBox;
 
 	/**
 	 * Create the application.
@@ -84,6 +85,8 @@ public class App extends JFrame
 		initChooseDirectory(getContentPane());
 		
 		initTable();
+		
+		initRenameFilesButton();
 		
 		initModelInfo();
 		
@@ -130,19 +133,26 @@ public class App extends JFrame
 		JPanel northPanel = new JPanel();
 		contentPane.add(northPanel, BorderLayout.NORTH);
 
-		ChooseDirectoryButtonHandler chooseDirectoryButtonHandler = new ChooseDirectoryButtonHandler(northPanel, currentDirectoryMgr);
-
-		Box horizontalBox = Box.createHorizontalBox();
-		northPanel.add(horizontalBox);
+		northHorizontalBox = Box.createHorizontalBox();
+		northPanel.add(northHorizontalBox);
 
 		JButton chooseDirectoryButton = new JButton("Choose Directory");
-
+		ChooseDirectoryButtonHandler chooseDirectoryButtonHandler = new ChooseDirectoryButtonHandler(northPanel, currentDirectoryMgr);
 		chooseDirectoryButton.addActionListener(chooseDirectoryButtonHandler);
-		horizontalBox.add(chooseDirectoryButton);
+		northHorizontalBox.add(chooseDirectoryButton);
 
 		JLabel selectedDirectoryLabel = new JLabel();
-		horizontalBox.add(selectedDirectoryLabel);
+		northHorizontalBox.add(selectedDirectoryLabel);
 		currentDirectoryMgr.setjLabel(selectedDirectoryLabel);
+		
+	}
+
+	private void initRenameFilesButton()
+	{
+		RenameFilesButtonhandler renameFilesButtonHandler = new RenameFilesButtonhandler(tableModel);
+		JButton renameFilesButton = new JButton("Rename Files");
+		renameFilesButton.addActionListener(renameFilesButtonHandler);
+		northHorizontalBox.add(renameFilesButton);
 	}
 
 	private void initMenuBar()
@@ -161,6 +171,7 @@ public class App extends JFrame
 	}
 	
 	private JTable table;
+	private MediaTableModel tableModel;
 	private CurrentDirectoryMgr currentDirectoryMgr;
 
 }

@@ -74,7 +74,7 @@ public class MediaTableModel extends AbstractTableModel
 		
 		if(column == FILE_NAME_COLUMN)
 		{
-			return data.getFileName();
+			return data.getFile().getAbsolutePath();
 		}
 		
 		if(column == IMAGE_COLUMN)
@@ -94,15 +94,12 @@ public class MediaTableModel extends AbstractTableModel
 		
 		if(column == DATE_COLUMN)
 		{
-			//return new Date(data.getCreationDate().getTimeInMillis());
-			//return data.getCreationDate().getTime();
 			return data.getCreationDate();
 		}
 		
 		if(column == 5)
 		{
-			//return data.getTimeSource();
-			return new Long(data.getCreationDate().getTimeInMillis());
+			return data.getNewFileName();
 		}
 		
 		return Integer.toString(row + 1) + " - " + Integer.toString(column + 1);
@@ -138,7 +135,6 @@ public class MediaTableModel extends AbstractTableModel
 		{
 			if(mediaData.getGroupData().getName().compareTo(name) == 0)
 			{
-				//this.fireTableCellUpdated(i, DATE_COLUMN);
 				this.fireTableRowsUpdated(i,  i);
 			}
 			++i;
@@ -160,6 +156,11 @@ public class MediaTableModel extends AbstractTableModel
 			mediaData.setGroupData(groupData);
 			this.fireTableRowsUpdated(row,  row);
 		}
+	}
+
+	public ArrayList<MediaData> getMediaDatas()
+	{
+		return mediaDatas;
 	}
 
 	private void loadDirectoryInfo(File directory)

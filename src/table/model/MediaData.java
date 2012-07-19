@@ -5,11 +5,13 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
+import org.apache.commons.io.FilenameUtils;
 import cameragroup.model.GroupData;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
@@ -81,11 +83,26 @@ public class MediaData
 		return newGuy;
 	}
 
+	public String getNewFileName()
+	{
+		Calendar date = getCreationDate();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd__HH_mm_ss");
+		
+		String form = sdf.format(date.getTime());
+		
+		return form;
+	}
+
 	public String getCameraModel()
 	{
 		if(ext.compareTo("mts") == 0)
 		{
 			return "Canon VIXIA HF200";
+		}
+		else if(ext.compareTo("mov") == 0)
+		{
+			return "NIKON D7000";
 		}
 		return cameraModel;
 	}
@@ -100,9 +117,9 @@ public class MediaData
 		return groupData;
 	}
 
-	public String getPath()
+	public File getFile()
 	{
-		return path;
+		return file;
 	}
 
 	public boolean isMedia()
@@ -130,16 +147,6 @@ public class MediaData
 		return ext != null && (ext.compareTo("jpg") == 0 || ext.compareTo("jpeg") == 0);
 	}
 	
-	public String getFileNameNoExt()
-	{
-		return fileNameNoExt;
-	}
-	
-	public String getFileName()
-	{
-		return getFileNameNoExt();
-	}
-
 	public void createThumbnail()
 	{
 		if(isImage())
@@ -206,22 +213,11 @@ public class MediaData
 
 	private void initFileInfo() throws NotMedia
 	{
-		path = file.getAbsolutePath();
-		int dot = path.lastIndexOf(".");
-		if(dot != -1)
+		ext = FilenameUtils.getExtension(file.getAbsolutePath()).toLowerCase();
+		
+		if(! isMedia())
 		{
-			ext = path.substring(dot + 1, path.length()).toLowerCase();
-			
-			if(! isMedia())
-			{
-				throw new NotMedia();
-			}
-	
-			int slash = path.lastIndexOf(File.separator);
-			if(slash != -1)
-			{
-				fileNameNoExt = path.substring(slash + 1, dot);
-			}
+			throw new NotMedia();
 		}
 		
 		getDateFromModifiedTime(file);
@@ -237,6 +233,7 @@ public class MediaData
 
 	private void getDateFromFileName()
 	{
+		String fileNameNoExt = FilenameUtils.getBaseName(file.getAbsolutePath());
 		Pattern p = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}__[0-9]{2}-[0-9]{2}-[0-9]{2}.*");
 		Matcher m = p.matcher(fileNameNoExt);
 		if(m.matches())
@@ -297,8 +294,6 @@ public class MediaData
 	}
 	
 	private File file;
-	private String path;
-	private String fileNameNoExt;
 	private String ext;
 	private Calendar exifDate;
 	private Calendar mtime;
