@@ -32,7 +32,7 @@ public class CameraGroupView extends javax.swing.JPanel implements ChangeListene
 		setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		add(new JLabel(groupData.getName() + " (" + Integer.toString(groupData.mediaCount) + ")"));
+		add(new JLabel(groupData.getName()));
 		
 		JPanel spinnerPanel = new JPanel();
 		spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.X_AXIS));

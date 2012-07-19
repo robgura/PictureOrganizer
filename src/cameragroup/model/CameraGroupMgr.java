@@ -19,12 +19,7 @@ public class CameraGroupMgr
 		{
 			foundGroup = new GroupData(groupName);
 			foundGroup.adjSeconds = 0;
-			foundGroup.mediaCount = 1;
 			groups.put(groupName,  foundGroup);
-		}
-		else
-		{
-			foundGroup.mediaCount++;
 		}
 		
 		return foundGroup;
