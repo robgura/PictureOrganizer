@@ -1,3 +1,5 @@
+package table.view;
+
 import java.awt.Component;
 import java.text.DateFormat;
 import java.util.Calendar;

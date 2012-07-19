@@ -1,8 +1,13 @@
+package cameragroup.view;
+
 import java.util.Iterator;
 import java.util.Map.Entry;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import cameragroup.model.CameraGroupMgr;
+import cameragroup.model.GroupData;
+import table.model.MediaTableModel;
 
 
 public class CameraGroupsView

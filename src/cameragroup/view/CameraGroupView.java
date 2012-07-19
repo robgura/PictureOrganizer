@@ -1,3 +1,5 @@
+package cameragroup.view;
+
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +14,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import table.model.MediaTableModel;
+import cameragroup.model.GroupData;
 
 
 

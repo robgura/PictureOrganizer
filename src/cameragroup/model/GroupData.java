@@ -1,4 +1,6 @@
 
+package cameragroup.model;
+
 public class GroupData
 {
 	public long adjSeconds = 0;

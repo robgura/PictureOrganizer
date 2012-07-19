@@ -1,3 +1,5 @@
+package cameragroup.model;
+
 import java.util.TreeMap;
 
 

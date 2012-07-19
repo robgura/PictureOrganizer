@@ -1,5 +1,10 @@
+package directory;
+
 import java.io.File;
 import javax.swing.JLabel;
+import cameragroup.model.CameraGroupMgr;
+import cameragroup.view.CameraGroupsView;
+import table.model.MediaTableModel;
 
 
 public class CurrentDirectoryMgr

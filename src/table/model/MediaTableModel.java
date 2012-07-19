@@ -1,8 +1,12 @@
+package table.model;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
+import cameragroup.model.CameraGroupMgr;
+import cameragroup.model.GroupData;
 
 
 @SuppressWarnings("serial")
