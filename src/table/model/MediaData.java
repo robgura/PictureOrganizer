@@ -87,7 +87,7 @@ public class MediaData
 	{
 		Calendar date = getCreationDate();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd__HH_mm_ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd__HH-mm-ss");
 		
 		String form = sdf.format(date.getTime());
 		
