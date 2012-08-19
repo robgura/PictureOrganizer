@@ -112,7 +112,8 @@ public class App extends JFrame
 	
 	private void initTable()
 	{
-		tableModel = new MediaTableModel(cgm);
+		tableModel = new MediaTableModel();
+		tableModel.addGrouping(cgm);
 		table = new JTable(tableModel);
 		
 		table.setAutoCreateRowSorter(true);

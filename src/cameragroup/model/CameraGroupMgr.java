@@ -1,9 +1,11 @@
 package cameragroup.model;
 
 import java.util.TreeMap;
+import table.model.IGrouping;
+import table.model.MediaData;
 
 
-public class CameraGroupMgr
+public class CameraGroupMgr implements IGrouping
 {
 	public CameraGroupMgr()
 	{
@@ -40,5 +42,12 @@ public class CameraGroupMgr
 	}
 	
 	private TreeMap<String, GroupData> groups;
+
+	@Override
+	public void AddGroup(MediaData media)
+	{
+		GroupData groupData = addCameraGroup(media.getCameraModel());
+		media.setGroupData(groupData);
+	}
 	
 }

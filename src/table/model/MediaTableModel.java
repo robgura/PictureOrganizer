@@ -20,10 +20,14 @@ public class MediaTableModel extends AbstractTableModel
 	
 	public static final int COLUMN_COUNT = 5;
 	
-	public MediaTableModel(CameraGroupMgr cameraGroupMgr)
+	public MediaTableModel()
 	{
-		super();
-		this.cameraGroupMgr = cameraGroupMgr;
+		groupings = new ArrayList<IGrouping>();
+	}
+	
+	public void addGrouping(IGrouping grouping)
+	{
+		groupings.add(grouping);
 	}
 
 	@Override
@@ -168,6 +172,14 @@ public class MediaTableModel extends AbstractTableModel
 	{
 		return mediaDatas;
 	}
+	
+	private void addToGroups(MediaData mediaData)
+	{
+		for(IGrouping g : groupings)
+		{
+			g.AddGroup(mediaData);
+		}
+	}
 
 	private void loadDirectoryInfo(File directory)
 	{
@@ -182,8 +194,7 @@ public class MediaTableModel extends AbstractTableModel
 			{
 				MediaData mediaData = new MediaData(mediaFiles[i]);
 				mediaDatas.add(mediaData);
-				GroupData groupData = cameraGroupMgr.addCameraGroup(mediaData.getCameraModel());
-				mediaData.setGroupData(groupData);
+				addToGroups(mediaData);
 			}
 			catch (NotMedia e)
 			{
@@ -193,6 +204,7 @@ public class MediaTableModel extends AbstractTableModel
 	}
 
 	private ArrayList<MediaData> mediaDatas;
-	private CameraGroupMgr cameraGroupMgr;
+	//private CameraGroupMgr cameraGroupMgr;
+	private ArrayList<IGrouping> groupings;
 
 }
