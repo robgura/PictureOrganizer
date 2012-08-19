@@ -5,7 +5,11 @@ import java.util.TreeMap;
 
 public class CameraGroupMgr
 {
-	
+	public CameraGroupMgr()
+	{
+		groups = new TreeMap<String, GroupData>();
+	}
+
 	public GroupData addCameraGroup(String groupName)
 	{
 		if(groupName == null)
@@ -25,33 +29,16 @@ public class CameraGroupMgr
 		return foundGroup;
 	}
 	
-	public static CameraGroupMgr getInstance()
-	{
-		if(instance == null)
-		{
-			instance = new CameraGroupMgr();
-		}
-		return instance;
-	}
-	
-	public void reset()
-	{
-		groups = new TreeMap<String, GroupData>();
-	}
-	
 	public TreeMap<String, GroupData> getGroups()
 	{
 		return groups;
 	}
 
-	private CameraGroupMgr()
+	public void reset()
 	{
 		groups = new TreeMap<String, GroupData>();
 	}
 	
-	private static CameraGroupMgr instance;
-	
 	private TreeMap<String, GroupData> groups;
-
 	
 }

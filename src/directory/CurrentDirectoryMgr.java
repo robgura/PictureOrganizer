@@ -13,7 +13,7 @@ public class CurrentDirectoryMgr
 	{
 		file = f;
 		
-		CameraGroupMgr.getInstance().reset();
+		cameraGroupMgr.reset();
 		
 		mediaTableModel.readDirectory(f);
 		
@@ -42,11 +42,18 @@ public class CurrentDirectoryMgr
 		this.jLabel = jLabel;
 	}
 
+	public void setCameraGroupMgr(CameraGroupMgr cameraGroupMgr)
+	{
+		this.cameraGroupMgr = cameraGroupMgr;
+	}
+
 	private File file;
 	
 	private MediaTableModel mediaTableModel;
 	
 	private CameraGroupsView cameraGroups;
+	
+	private CameraGroupMgr cameraGroupMgr;
 
 	private JLabel jLabel;
 

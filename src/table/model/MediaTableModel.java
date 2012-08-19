@@ -20,6 +20,12 @@ public class MediaTableModel extends AbstractTableModel
 	
 	public static final int COLUMN_COUNT = 5;
 	
+	public MediaTableModel(CameraGroupMgr cameraGroupMgr)
+	{
+		super();
+		this.cameraGroupMgr = cameraGroupMgr;
+	}
+
 	@Override
 	public int getColumnCount()
 	{
@@ -176,7 +182,7 @@ public class MediaTableModel extends AbstractTableModel
 			{
 				MediaData mediaData = new MediaData(mediaFiles[i]);
 				mediaDatas.add(mediaData);
-				GroupData groupData = CameraGroupMgr.getInstance().addCameraGroup(mediaData.getCameraModel());
+				GroupData groupData = cameraGroupMgr.addCameraGroup(mediaData.getCameraModel());
 				mediaData.setGroupData(groupData);
 			}
 			catch (NotMedia e)
@@ -187,5 +193,6 @@ public class MediaTableModel extends AbstractTableModel
 	}
 
 	private ArrayList<MediaData> mediaDatas;
+	private CameraGroupMgr cameraGroupMgr;
 
 }

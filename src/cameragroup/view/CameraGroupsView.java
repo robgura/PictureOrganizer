@@ -15,8 +15,9 @@ import table.model.MediaTableModel;
 
 public class CameraGroupsView implements ActionListener
 {
-	public CameraGroupsView(JPanel inPanel, MediaTableModel _model, JTable _jtable)
+	public CameraGroupsView(JPanel inPanel, CameraGroupMgr inMgr, MediaTableModel _model, JTable _jtable)
 	{
+		cameraGroupMgr = inMgr;
 		parentPanel = inPanel;
 		parentPanel.setLayout(new BoxLayout(parentPanel, BoxLayout.Y_AXIS));
 		
@@ -35,7 +36,7 @@ public class CameraGroupsView implements ActionListener
 	public void resetGroups()
 	{
 		groupsPanel.removeAll();
-		Iterator<Entry<String, GroupData>> iter = CameraGroupMgr.getInstance().getGroups().entrySet().iterator();
+		Iterator<Entry<String, GroupData>> iter = cameraGroupMgr.getGroups().entrySet().iterator();
 		while(iter.hasNext())
 		{
 			Entry<String, GroupData> entry = iter.next();
@@ -49,13 +50,14 @@ public class CameraGroupsView implements ActionListener
 		String groupName = new String("Group " + Integer.toString(groupCount++));
 		GroupData gd = new GroupData(groupName);
 		
-		CameraGroupMgr.getInstance().addCameraGroup(groupName);
+		cameraGroupMgr.addCameraGroup(groupName);
 		groupsPanel.add(new CameraGroupView(gd, model, jtable));
 	}
 
 	private JPanel parentPanel;
 	private JPanel groupsPanel;
 	private MediaTableModel model;
+	private CameraGroupMgr cameraGroupMgr;
 	private JTable jtable;
 	private static int groupCount = 1;
 }

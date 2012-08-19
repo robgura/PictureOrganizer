@@ -16,6 +16,7 @@ import javax.swing.Box;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
+import cameragroup.model.CameraGroupMgr;
 import cameragroup.view.CameraGroupsView;
 import directory.ChooseDirectoryButtonHandler;
 import directory.CurrentDirectoryMgr;
@@ -62,8 +63,6 @@ public class App extends JFrame
 		}
 	}
 
-	private Box northHorizontalBox;
-
 	/**
 	 * Create the application.
 	 * 
@@ -84,6 +83,8 @@ public class App extends JFrame
 
 		initChooseDirectory(getContentPane());
 		
+		initCameraGroupMgr();
+		
 		initTable();
 		
 		initRenameFilesButton();
@@ -92,18 +93,26 @@ public class App extends JFrame
 		
 	}
 
+	private void initCameraGroupMgr()
+	{
+		cgm = new CameraGroupMgr();
+	}
+	
 	private void initModelInfo()
 	{
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.WEST);
-		CameraGroupsView cameraGroups = new CameraGroupsView(panel, tableModel, table);
 		
-		currentDirectoryMgr.setCameraGroups(cameraGroups);
+		CameraGroupsView cameraGroupsView = new CameraGroupsView(panel, cgm, tableModel, table);
+	
+		currentDirectoryMgr.setCameraGroupMgr(cgm);
+		
+		currentDirectoryMgr.setCameraGroups(cameraGroupsView);
 	}
 	
 	private void initTable()
 	{
-		tableModel = new MediaTableModel();
+		tableModel = new MediaTableModel(cgm);
 		table = new JTable(tableModel);
 		
 		table.setAutoCreateRowSorter(true);
@@ -170,8 +179,10 @@ public class App extends JFrame
 
 	}
 	
+	private Box northHorizontalBox;
 	private JTable table;
 	private MediaTableModel tableModel;
 	private CurrentDirectoryMgr currentDirectoryMgr;
+	private CameraGroupMgr cgm;
 
 }
