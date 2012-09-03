@@ -18,7 +18,7 @@ public class CameraGroupMgr implements IGrouping
 	 * @param groupName
 	 * @return
 	 */
-	public GroupData addCameraGroup(String groupName)
+	private GroupData addCameraGroup(String groupName)
 	{
 		if(groupName == null)
 		{
@@ -50,10 +50,9 @@ public class CameraGroupMgr implements IGrouping
 	private TreeMap<String, GroupData> groups;
 
 	@Override
-	public void AddGroup(MediaData media)
+	public void AddNewMediaDataToGroup(MediaData media)
 	{
 		GroupData groupData = addCameraGroup(media.getCameraModel());
 		media.setGroupData(groupData);
 	}
-	
 }

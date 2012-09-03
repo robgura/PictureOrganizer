@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
-import cameragroup.model.CameraGroupMgr;
 import cameragroup.model.GroupData;
 
 
@@ -177,7 +176,7 @@ public class MediaTableModel extends AbstractTableModel
 	{
 		for(IGrouping g : groupings)
 		{
-			g.AddGroup(mediaData);
+			g.AddNewMediaDataToGroup(mediaData);
 		}
 	}
 
