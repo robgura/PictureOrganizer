@@ -12,6 +12,12 @@ public class CameraGroupMgr implements IGrouping
 		groups = new TreeMap<String, GroupData>();
 	}
 
+	/**
+	 * adds a new GroupData to the group name if it doesn't already exist, returns indexed one if it already does exist
+	 * 
+	 * @param groupName
+	 * @return
+	 */
 	public GroupData addCameraGroup(String groupName)
 	{
 		if(groupName == null)

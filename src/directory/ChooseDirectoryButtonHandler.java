@@ -21,7 +21,7 @@ public class ChooseDirectoryButtonHandler implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		JFileChooser fileChooser = new JFileChooser("Z:\\Pictures");
+		JFileChooser fileChooser = new JFileChooser("Z:\\Pending");
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fileChooser.setMultiSelectionEnabled(false);
 		
