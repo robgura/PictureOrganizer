@@ -18,7 +18,7 @@ public class CameraGroupMgr implements IGrouping
 	 * @param groupName
 	 * @return
 	 */
-	private GroupData addCameraGroup(String groupName)
+	public GroupData addCameraGroup(String groupName)
 	{
 		if(groupName == null)
 		{
